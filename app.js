@@ -4,6 +4,12 @@ const morgan = require('morgan');
 const cors = require('cors');
 const path = require('path')
 const mongoose = require('mongoose');
+const passport = require('passport');
+const flash = require('connect-flash');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+// const session = require(express-session);
+
 
 //Conexion a base de datos
 const uri = 'mongodb://localhost:27017/stock';
@@ -13,11 +19,18 @@ mongoose.connect(uri, options).then(
     err => { err }
 );
 
+var Users = require('./routes/Users');
+app.use('/users', Users);
+
+
 //Middleware
 app.use(morgan('tiny'));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+
 
 // Crear index
 app.get('/', (req, res) => {
@@ -27,6 +40,7 @@ app.use('/api', require('./routes/comida'));
 app.use('/api', require('./routes/categoria'));
 app.use('/api', require('./routes/movimiento'));
 app.use('/api', require('./routes/medida'));
+app.use('/api', require('./routes/users'));
 
 
 

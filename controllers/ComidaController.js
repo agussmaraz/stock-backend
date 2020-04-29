@@ -84,14 +84,16 @@ export const editId = async (req, res) => {
         const comidadb = await Comida.findByIdAndUpdate(_id, body, { new: true });
         // console.log(comidadb.date)
         const unidadesTotalAhora = comidadb.totalUnit;
+        const today = new Date();
+        console.log(today)
         
         if (unidadesTotalAntes !== unidadesTotalAhora) {
             const diferencia = unidadesTotalAhora - unidadesTotalAntes;
             if (diferencia == 1) {
-                await movimientos.crear(comidadb, 'suma', diferencia, comidadb.date);
+                await movimientos.crear(comidadb, 'suma', diferencia, today);
             }
             else {
-                await movimientos.crear(comidadb, 'resta', Math.abs(diferencia), comidadb.date);
+                await movimientos.crear(comidadb, 'resta', Math.abs(diferencia), today);
             }
         }
         res.json(comidadb);
